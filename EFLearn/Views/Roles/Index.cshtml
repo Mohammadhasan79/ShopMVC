@@ -1,0 +1,63 @@
+﻿@model RoleUser
+@inject UserManager<IdentityUser> UserManager
+
+<h2>سطوح دسترسی</h2>
+
+<form asp-action="Create" method="post">
+    <input type="text" name="Role" placeholder="نام نقش جدید" />
+    <button type="submit">ایجاد نقش</button>
+</form>
+
+<table class="table">
+    <tr>
+        <th>شناسه</th>
+        <th>سطح دسترسی</th>
+        <th>عملیات</th>
+    </tr>
+    @foreach (var role in Model.Roles)
+    {
+        <tr>
+            <td>@role.Id</td>
+            <td>@role.Name</td>
+            <td>
+                <a asp-action="Delete" asp-route-id="@role.Id">حذف</a>
+            </td>
+        </tr>
+    }
+</table>
+<h2>مدیریت کاربران</h2>
+
+        @* <a class="link-info" asp-controller="Roles" asp-action="CreateUser">Add User</a> *@
+        @* <button type="button" class="btn btn-outline-success" asp-controller="Roles" asp-action="CreateUser">افزودن کاربر</button> *@
+        <a asp-controller="Roles" asp-action="CreateUser" class="btn btn-outline-success">افزودن کاربر</a>
+
+
+<table class="table">
+    <tr>
+        <th>ایدی</th>
+        <th>ایمیل</th>
+        <th>تعداد بلاک شدن دسترسی</th>
+        <th>نام کاربری</th>
+        <th>حذف کاربر</th>
+        <th>سطح دسترسی</th>
+        <th>مدیریت دسترسی</th>
+
+    </tr>
+    @foreach (var User in Model.Users)
+    {
+        var roles = await UserManager.GetRolesAsync(User);
+        <tr>
+            <td>@User.Id</td>
+            <td>@User.Email</td>
+            <td>@User.AccessFailedCount</td>
+            <td>@User.UserName</td>
+            <td>
+                <a asp-action="DeleteUser" asp-route-UserEmail="@User.Email">حذف</a>
+            </td>
+            <td>@string.Join(", ", roles)</td>
+            <td>
+                <a asp-action="ManageRoles" asp-route-UserEmail="@User.Email">ویرایش</a> 
+            </td>
+        </tr>
+    }
+</table>

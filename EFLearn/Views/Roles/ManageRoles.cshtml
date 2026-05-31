@@ -1,0 +1,32 @@
+﻿@model RoleManage
+<h1>پنل ویرایش دسترسی کاربر</h1>
+
+<h4>اضافه کردن دسترسی</h4>
+
+<form asp-action="AddUserRole" method="post">
+    <input type="hidden" name="UserEmail" value="@Model.UserEmail" />
+    <div>
+        <lable>دسترسی های کاربر</lable>
+        @foreach(var role in Model.UserRoles)
+        {
+            <p>@role</p>
+        }
+    </div>
+    <div>
+        <label>سطح را انتخاب کنید</label>
+        <select name="RoleName" asp-items="@Model.RolesList"></select>
+    </div>
+    <br />
+    <button type="submit">افزودن نقش</button>
+</form>
+<h4>حذف کردن دسترسی</h4>
+
+<form asp-action="DeleteUserRole" method="post">
+    <input type="hidden" name="UserEmail" value="@Model.UserEmail" />
+    <div>
+        <label>سطح را انتخاب کنید</label>
+        <select name="RoleName" asp-items="@Model.RolesList"></select>
+    </div>
+    <br />
+    <button type="submit">حذف نقش</button>
+</form>
